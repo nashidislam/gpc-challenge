@@ -11,22 +11,27 @@ public class RoverPathFinder {
 		Position p = new Position();
 		String [] inputString;
 		try {
+			// Take input file from the resource folder
 		      File myObj = new File("./src/main/resources/inputfile.txt");
 		      Scanner myReader = new Scanner(myObj);
 		      
 		      while (myReader.hasNextLine()) {
 		        String data = myReader.nextLine();
 		        //Input file line reads from here
+		        
+		        //parses the first line and sets the top right corner
 		        if(linecounter == 0){
 		        	inputString = data.split(" ");
 		        	furtherestPoint.setLocation(Integer.parseInt(inputString[0]), Integer.parseInt(inputString[1]));
 		        }
+		        //Sets the initial position for the rover
 		        else if(linecounter % 2 == 1){
 		        	inputString = data.split(" ");
 		        	p.setxCordinate(Integer.parseInt(inputString[0]));
 		        	p.setyCordinate(Integer.parseInt(inputString[1]));
 		        	p.setDirection(inputString[2]);
 		        }
+		        //Moves the first rover by parsing input direction commands
 		        else{
 		        	for(int i = 0 ;i <data.length();i++){
 		        		char modifier = data.charAt(i);
@@ -44,11 +49,14 @@ public class RoverPathFinder {
 		      System.out.println("==========");
 		      myReader.close();
 		    } catch (FileNotFoundException e) {
-		      System.out.println("An error occurred.");
+		      System.out.println("File Not Found");
 		      e.printStackTrace();
-		    }
+		    }catch(NumberFormatException  e) {
+		    	System.out.println("Cant parse the String for Number");
+			     e.printStackTrace();
+			}
 	}
-	
+//Mehtod to change direction of the rover	
 	public static Position changeDirection(Position p, String shift) {
 		String currentDirection = p.getDirection();
 		if (shift.compareTo("L") == 0) {
@@ -74,7 +82,7 @@ public class RoverPathFinder {
 		}
 		return p;
 	}
-
+//Method to move forward the rover
 	public static Position moveRover(Position p, Point furtherestPoint) {
 		if (p.getDirection().compareTo("N") == 0 && p.getyCordinate() < furtherestPoint.getY()) {
 			p.setyCordinate(p.getyCordinate() + 1);
